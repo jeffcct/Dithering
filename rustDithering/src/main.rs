@@ -22,20 +22,20 @@ fn dither_cie_colours() {
                                 color_mode::MyLab::new(255, 0, 255),
                                 color_mode::MyLab::new(0, 255, 255), 
                                 ];
-    // Load the image as RGB
+    
+
     let img = image::open("data/fractal.png").unwrap().to_rgb8();
     let (width, height) = img.dimensions();
 
     let index = |x: u32, y: u32| -> Option<usize> {
         if x < width && y < height {
-            return Some(y as usize * width as usize + x as usize); // Adjusted for RGB
+            return Some(y as usize * width as usize + x as usize); 
         } else {
             println!("x, width: {x}, {width} y, height: {y}, {height}");
             return None;
         }
     };
 
-    // Convert pixels to RGB
     let img_data: Vec<color_mode::MyLab> = img.pixels()
         .map(|p| color_mode::MyLab::new(p[0], p[1], p[2]))
         .collect();
@@ -83,9 +83,7 @@ fn dither_cie_colours() {
     }
     ).collect();
 
-    // Reconstruct image
     let output_img = RgbImage::from_raw(width, height, img_data_u8);
-    // Save modified image
     output_img.unwrap().save("output.png").unwrap();
 
 }
@@ -101,20 +99,18 @@ fn dither_rgb_colours() {
                                 color_mode::RGB::new(0, 255, 255), 
                                 ];
 
-    // Load the image as RGB
     let img = image::open("data/butterflies.jpg").unwrap().to_rgb8();
     let (width, height) = img.dimensions();
 
     let index = |x: u32, y: u32| -> Option<usize> {
         if x < width && y < height {
-            return Some(y as usize * width as usize + x as usize); // Adjusted for RGB
+            return Some(y as usize * width as usize + x as usize);
         } else {
             println!("x, width: {x}, {width} y, height: {y}, {height}");
             return None;
         }
     };
 
-    // Convert pixels to RGB
     let img_data: Vec<color_mode::RGB> = img.pixels()
         .map(|p| color_mode::RGB::new(p[0], p[1], p[2]))
         .collect();
@@ -151,27 +147,12 @@ fn dither_rgb_colours() {
         }
     }
 
-
-    // Convert back to u8 before saving
     let img_data_u8: Vec<u8> = img_data_copy.iter().flat_map(|&rgb| vec![rgb.red.clamp(0, 255) as u8, 
     rgb.green.clamp(0, 255) as u8, 
     rgb.blue.clamp(0, 255) as u8]
     ).collect();
 
-    //print!("{:?}", img_data_copy);
-
-    // for y in 0..height {
-    //     for x in 0..width {
-    //         let idx = index(x, y).unwrap();
-    //         for offset in 0..3 {
-    //             img_data_u8.push(img_data[idx + offset]);
-    //         }
-    //     }
-    // }
-
-    // Reconstruct image
     let output_img = RgbImage::from_raw(width, height, img_data_u8);
-    // Save modified image
     output_img.unwrap().save("output.png").unwrap();
 
 }
@@ -186,20 +167,17 @@ fn main() {
 fn dither_rgb_channels() {
     let colors = vec![0, 255];
 
-    // Load the image as RGB
     let img = image::open("data/bigImage.jpeg").unwrap().to_rgb8();
     let (width, height) = img.dimensions();
 
     let index = |x: u32, y: u32| -> Option<usize> {
         if x < width && y < height {
-            return Some((y as usize * width as usize + x as usize) * 3); // Adjusted for RGB
+            return Some((y as usize * width as usize + x as usize) * 3);
         } else {
-            // println!("x, width: {}, {}, y, height: {}, {} was out of bounds", x, width, y, height);
             return None;
         }
     };
 
-    // Convert pixels to i16
     let img_data: Vec<i16> = img.pixels()
         .flat_map(|p| p.0.iter().map(|&c| c as i16))
         .collect();
@@ -241,11 +219,7 @@ fn dither_rgb_channels() {
         }
     }
 
-
-    // Convert back to u8 before saving
     let img_data_u8: Vec<u8> = img_data_copy.iter().map(|&c| c.clamp(0, 255) as u8).collect();
-    // Reconstruct image
     let output_img = RgbImage::from_raw(width, 2*height, img_data_u8);
-    // Save modified image
     output_img.unwrap().save("output.png").unwrap();
 }

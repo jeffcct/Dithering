@@ -129,7 +129,6 @@ impl Add for MyLab {
     }
 }
 
-// Implement subtraction for Lab
 impl Sub for MyLab {
     type Output = MyLab;
 
@@ -138,7 +137,6 @@ impl Sub for MyLab {
     }
 }
 
-// Implement scalar multiplication for Lab
 impl Mul<f32> for MyLab {
     type Output = MyLab;
 
@@ -147,7 +145,6 @@ impl Mul<f32> for MyLab {
     }
 }
 
-// Implement scalar division for Lab
 impl Div<f32> for MyLab {
     type Output = MyLab;
 
